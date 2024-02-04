@@ -1,3 +1,5 @@
+"use client"
+
 import { Proximity } from "../lib/models/Proximity";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";

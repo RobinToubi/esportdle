@@ -65,9 +65,9 @@ export const RulesModal = (): JSX.Element => {
           </p>
           <h3 style={{ marginTop: 10 }}>Understand the result panel</h3>
           <p>
-            For each player's selection, you will see a line on the table
+            For each player&apos;s selection, you will see a line on the table
             representing how close you are from the result. If you hover a table
-            cell, you'll have some informations about your result.
+            cell, you&apos;ll have some informations about your result.
           </p>
           <section
             style={{ display: "flex", flexDirection: "column", marginLeft: 10 }}
@@ -130,7 +130,6 @@ export const RulesModal = (): JSX.Element => {
                 <Checkbox
                   size="small"
                   checked={showHelp}
-                  color="info"
                   sx={{color: "white", ":checked": "white" }}
                   onChange={(e) => {
                     setShowHelp(() => e.currentTarget.checked);
