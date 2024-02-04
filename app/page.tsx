@@ -1,95 +1,106 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { Box, Typography } from "@mui/material";
+import PlayerList from "./components/PlayerList";
+import players from "@/public/players.json";
+import { useLocalStorage } from "./lib/hooks/storage";
+import { getCurrentStorageKey } from "./lib/random";
+import { Proximity } from "./lib/models/Proximity";
+import { RulesModal } from "./components/RulesModal";
+import { ResultTable } from "./components/ResultTable";
+import { LifeCounter } from "./components/LifeCounter";
+import { PlayerCard } from "./components/PlayerCard";
 
 export default function Home() {
+  const [store, setStore] = useLocalStorage<Array<Proximity>>(
+    getCurrentStorageKey(),
+    []
+  );
+
+  const guess = async (id: string) => {
+    const guessResponse = await fetch("/api/guess", {
+      method: "POST",
+      headers: { "attemps": store.length.toString() },
+      body: JSON.stringify({ id: id }),
+    });
+    const data: Proximity = await guessResponse.json();
+    setStore(() => [...store, data]);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
+    <main
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        backgroundColor: "#424242",
+        textAlign: "center",
+      }}
+    >
+      <RulesModal />
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        marginTop={"10vh"}
+      >
+        <Typography
+          fontSize={35}
+          fontWeight={"bold"}
+          color={"common.white"}
+          component={"h1"}
+        >
+          LOLESPORTDLE
+        </Typography>
+        <Typography
+          fontSize={15}
+          fontWeight={"bold"}
+          fontStyle={"italic"}
+          color={"common.white"}
+          component={"span"}
+        >
+          Guess the player
+        </Typography>
+      </Box>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        rowGap={5}
+        marginTop={5}
+      >
+        <LifeCounter lives={store} />
+        {store.findLast(r => r.result)?.result ? (
+          <PlayerCard player={store.findLast(r => r.result)!.result!} />
+        ) : (
+          <PlayerList
+            elements={players.filter(
+              (player) =>
+                !store
+                  .flatMap((s: Proximity) => s.player?.id)
+                  .includes(player.id) && player.birthDate !== "TBD"
+            )}
+            onPlayerChanges={guess}
+          />
+        )}
+        <ResultTable results={store} />
+      </Box>
+      <footer
+        style={{
+          width: "100vw",
+          position: "fixed",
+          bottom: 0,
+          textAlign: "center",
+          background: "#525252",
+        }}
+      >
+        <div style={{ margin: 5 }}>
+          Made with <span style={{ color: "red" }}>&hearts;</span> by{" "}
+          <a target="_blank" href="http://github.com/RobinToubi">
+            Toubi
           </a>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </footer>
     </main>
-  )
+  );
 }
