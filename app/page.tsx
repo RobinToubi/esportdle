@@ -1,15 +1,15 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
-import PlayerList from "./components/PlayerList";
+import PlayerList from "@/app/components/PlayerList";
 import players from "@/public/players.json";
-import { useLocalStorage } from "./lib/hooks/storage";
-import { getCurrentStorageKey } from "./lib/random";
-import { Proximity } from "./lib/models/Proximity";
-import { RulesModal } from "./components/RulesModal";
-import { ResultTable } from "./components/ResultTable";
-import { LifeCounter } from "./components/LifeCounter";
-import { PlayerCard } from "./components/PlayerCard";
+import { useLocalStorage } from "@/app/lib/hooks/storage";
+import { getCurrentStorageKey } from "@/app/lib/random";
+import { Proximity } from "@/app/lib/models/Proximity";
+import { RulesModal } from "@/app/components/RulesModal";
+import { ResultTable } from "@/app/components/ResultTable";
+import { LifeCounter } from "@/app/components/LifeCounter";
+import { PlayerCard } from "@/app/components/PlayerCard";
 
 export default function Home() {
   const [store, setStore] = useLocalStorage<Array<Proximity>>(
