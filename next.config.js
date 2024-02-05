@@ -9,8 +9,7 @@ const nextConfig = {
         pathname: "/players/**.png",
       },
     ],
-  },
-  basePath: "/app"
+  }
 };
 
 module.exports = nextConfig;
