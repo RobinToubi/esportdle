@@ -10,7 +10,7 @@ const nextConfig = {
       },
     ],
   },
-  basePath: "app"
+  basePath: "/app"
 };
 
 module.exports = nextConfig;
