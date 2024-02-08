@@ -18,11 +18,11 @@ export const PlayerCard = (props: PlayerViewProps) => {
         borderRadius: "7px",
         padding: "2px 10px",
         alignItems: "center",
+        columnGap: "10px"
       }}
-      width={"100%"} maxWidth={"300px"}
+      width={"100%"} height={100} maxWidth={"400px"}
     >
-      <Image src={props.player.picture} width={64} height={64} alt={props.player.summonerName} style={{
-        borderRadius: '50%', display: 'block', margin: '0 auto'}} />
+      <Image src={props.player.picture} width={100} height={100} alt={props.player.summonerName} />
       <ReactCountryFlag
         style={{ fontSize: "1.5em", lineHeight: "1.5em" }}
         countryCode={props.player.country}

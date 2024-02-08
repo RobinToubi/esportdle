@@ -29,6 +29,7 @@ export default function Home() {
       body: JSON.stringify({ id: id }),
     });
     const data: Proximity = await guessResponse.json();
+    localStorage.setItem(getCurrentStorageKey(),JSON.stringify([...store, data]))
     setStore([...store, data]);
   };
 

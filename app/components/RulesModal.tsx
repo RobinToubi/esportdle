@@ -24,7 +24,7 @@ const style = {
 };
 
 export const RulesModal = (): JSX.Element => {
-  const [help, setHelp] = useState<boolean>(true);
+  const [help, setHelp] = useState<boolean>(false);
 
   useEffect(() => {
     // Récupérer les données du localStorage lors du rendu initial du composant
