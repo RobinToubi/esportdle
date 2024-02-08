@@ -5,7 +5,6 @@ import { Player } from "../../lib/models/Player";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  console.log(req.headers.get("Attemps"));
   const data = await req.json();
   if (!data.id) {
     NextResponse.json({ message: "ID not found in body." });

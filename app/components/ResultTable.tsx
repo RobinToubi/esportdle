@@ -41,7 +41,6 @@ export const ResultTable = (props: { results: Array<Proximity> }) => {
             <TableRow
               key={result.player.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              style={{ transition: "ease-in" }}
             >
               <TableCell>{result.player.summonerName}</TableCell>
               <ResultCell
