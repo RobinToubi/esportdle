@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
-import { useLocalStorage } from "../lib/hooks/storage";
 
 const style = {
   position: "absolute",
@@ -25,14 +24,25 @@ const style = {
 };
 
 export const RulesModal = (): JSX.Element => {
-  const [showHelp, setShowHelp] = useLocalStorage<boolean>(
-    "disableHints",
-    false
-  );
+  const [help, setHelp] = useState<boolean>(true);
 
-  const [open, setOpen] = useState(!showHelp);
+  useEffect(() => {
+    // Récupérer les données du localStorage lors du rendu initial du composant
+    const storedValue = localStorage.getItem("disableHints");
+    if (storedValue) {
+      setHelp(JSON.parse(storedValue));
+      setOpen(!JSON.parse(storedValue));
+    }
+  }, []);
+
+  const [open, setOpen] = useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const saveToLocalStorage = (value: boolean) => {
+    setHelp(value);
+    localStorage.setItem('disableHints', value.toString())
+  }
 
   return (
     <>
@@ -129,10 +139,10 @@ export const RulesModal = (): JSX.Element => {
               control={
                 <Checkbox
                   size="small"
-                  checked={showHelp}
-                  sx={{color: "white", ":checked": "white" }}
+                  checked={help}
+                  style={{color: "white" }}
                   onChange={(e) => {
-                    setShowHelp(() => e.currentTarget.checked);
+                    saveToLocalStorage(e.currentTarget.checked);
                   }}
                 ></Checkbox>
               }
@@ -140,6 +150,7 @@ export const RulesModal = (): JSX.Element => {
             <Button
               variant="contained"
               color={"primary"}
+              sx={{backgroundColor: 'grey', ":hover": {color: 'grey', backgroundColor: 'white'}}}
               onClick={() => setOpen(false)}
             >
               Close

@@ -31,6 +31,7 @@ export default function PlayerList(props: IListProps) {
           placeholder="Summoner ... "
           InputProps={{
             ...params.InputProps,
+            sx: {borderRadius: '15px'},
             type: "search",
           }}
         ></TextField>

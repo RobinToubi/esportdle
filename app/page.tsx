@@ -3,19 +3,24 @@
 import { Box, Typography } from "@mui/material";
 import PlayerList from "@/app/components/PlayerList";
 import players from "@/public/players.json";
-import { useLocalStorage } from "@/app/lib/hooks/storage";
 import { getCurrentStorageKey } from "@/app/lib/random";
 import { Proximity } from "@/app/lib/models/Proximity";
 import { RulesModal } from "@/app/components/RulesModal";
 import { ResultTable } from "@/app/components/ResultTable";
 import { LifeCounter } from "@/app/components/LifeCounter";
 import { PlayerCard } from "@/app/components/PlayerCard";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [store, setStore] = useLocalStorage<Array<Proximity>>(
-    getCurrentStorageKey(),
-    []
-  );
+  const [store, setStore] = useState<Array<Proximity>>([]);
+
+  useEffect(() => {
+    // Récupérer les données du localStorage lors du rendu initial du composant
+    const storedValue = localStorage.getItem(getCurrentStorageKey());
+    if (storedValue) {
+      setStore(JSON.parse(storedValue));
+    }
+  }, []);
 
   const guess = async (id: string) => {
     const guessResponse = await fetch("/api/guess", {
@@ -24,7 +29,7 @@ export default function Home() {
       body: JSON.stringify({ id: id }),
     });
     const data: Proximity = await guessResponse.json();
-    setStore(() => [...store, data]);
+    setStore([...store, data]);
   };
 
   return (
@@ -81,6 +86,7 @@ export default function Home() {
                   .includes(player.id) && player.birthDate !== "TBD"
             )}
             onPlayerChanges={guess}
+            style={{borderRadius: '15px'}}
           />
         )}
         <ResultTable results={store} />

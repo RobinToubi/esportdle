@@ -21,7 +21,8 @@ export const PlayerCard = (props: PlayerViewProps) => {
       }}
       width={"100%"} maxWidth={"300px"}
     >
-      <Image src={props.player.picture} width={64} height={64} alt={props.player.summonerName} />
+      <Image src={props.player.picture} width={64} height={64} alt={props.player.summonerName} style={{
+        borderRadius: '50%', display: 'block', margin: '0 auto'}} />
       <ReactCountryFlag
         style={{ fontSize: "1.5em", lineHeight: "1.5em" }}
         countryCode={props.player.country}
