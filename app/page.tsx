@@ -10,6 +10,7 @@ import { ResultTable } from '@/app/components/ResultTable'
 import { LifeCounter } from '@/app/components/LifeCounter'
 import { PlayerCard } from '@/app/components/PlayerCard'
 import { useEffect, useState } from 'react'
+import ShareResultButton from './components/ShareResult'
 
 export default function Home() {
     const [store, setStore] = useState<Array<Proximity>>([])
@@ -82,9 +83,14 @@ export default function Home() {
             >
                 <LifeCounter lives={store} />
                 {store.findLast((r) => r.result)?.result ? (
-                    <PlayerCard
-                        player={store.findLast((r) => r.result)!.result!}
-                    />
+                    <>
+                        <PlayerCard
+                            player={store.findLast((r) => r.result)!.result!}
+                        />
+                        <ShareResultButton
+                            results={store.flatMap((s) => s.compare)}
+                        />
+                    </>
                 ) : (
                     <PlayerList
                         elements={players
