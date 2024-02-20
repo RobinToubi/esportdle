@@ -41,8 +41,12 @@ export const ResultCell = (props: ResultCellProps) => {
     const values = validity()
 
     const getTooltipMessage = (defaultMessage: string) => {
-        if (typeof props.value === 'boolean') return defaultMessage
-        return `${props.value.toUpperCase()} ${defaultMessage}`
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <p>{props.value.toString().toUpperCase()}</p>
+                <p>{defaultMessage}</p>
+            </div>
+        )
     }
 
     return (
@@ -50,6 +54,7 @@ export const ResultCell = (props: ResultCellProps) => {
             <Tooltip
                 title={getTooltipMessage(values.message)}
                 enterTouchDelay={0}
+                leaveTouchDelay={2000}
             >
                 <Grid
                     key={values.result}

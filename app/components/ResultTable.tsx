@@ -1,15 +1,13 @@
 'use client'
 
-import { Tooltip, Box, Collapse, Grid, List } from '@mui/material'
+import { Collapse, Grid } from '@mui/material'
 import { CountryProximity, Proximity } from '../lib/models/Proximity'
 import { ResultCell } from './ResultCell'
 import ReactCountryFlag from 'react-country-flag'
 import Image from 'next/image'
-import NorthEastIcon from '@mui/icons-material/NorthEast'
-import SouthEastIcon from '@mui/icons-material/SouthEast'
-import { calculateAge } from '../lib/compare/age'
 import { getCountryByCode } from '../lib/compare/country'
 import { TransitionGroup } from 'react-transition-group'
+import { AgeResultCell } from './AgeResultCell'
 
 export const ResultTable = (props: { results: Array<Proximity> }) => {
     if (!props?.results?.length) {
@@ -83,21 +81,19 @@ export const ResultTable = (props: { results: Array<Proximity> }) => {
                                         check: () =>
                                             result.compare.country ===
                                             CountryProximity.VALID,
-                                        message: "Player's country is correct.",
+                                        message: `${result.player.summonerName} comes from the same country as the country of the player to guess`,
                                     }}
                                     invalidCell={{
                                         check: () =>
                                             result.compare.country ===
                                             CountryProximity.FAR,
-                                        message:
-                                            "Player's country is not correct",
+                                        message: `${result.player.summonerName} does not come from the same country as the country of the player to guess`,
                                     }}
                                     partiallyValidCell={{
                                         check: () =>
                                             result.compare.country ===
                                             CountryProximity.NEAR,
-                                        message:
-                                            "Player's country is in the same continent as the anwer's country.",
+                                        message: `${result.player.summonerName} comes from a country on the same continent as the country of the player being guessed`,
                                     }}
                                 >
                                     <ReactCountryFlag
@@ -180,59 +176,11 @@ export const ResultTable = (props: { results: Array<Proximity> }) => {
                                         height={32}
                                     />
                                 </ResultCell>
-                                <ResultCell
-                                    xs={1}
-                                    value={new Date(result.player.birthDate)
-                                        .getFullYear()
-                                        .toString()}
-                                    validCell={{
-                                        check: () => result.compare.older === 0,
-                                        message: 'Age is correct.',
-                                    }}
-                                    invalidCell={{
-                                        check: () => result.compare.older !== 0,
-                                        message: 'Age is incorrect.',
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        {calculateAge(
-                                            new Date(result.player.birthDate)
-                                        )}
-                                        {result.compare.older === 1 ? (
-                                            <Tooltip
-                                                title={
-                                                    'Player to guess is older than ' +
-                                                    result.player.summonerName
-                                                }
-                                            >
-                                                <NorthEastIcon
-                                                    style={{ fontSize: 16 }}
-                                                />
-                                            </Tooltip>
-                                        ) : (
-                                            ''
-                                        )}
-                                        {result.compare.older === -1 ? (
-                                            <Tooltip
-                                                title={
-                                                    'Player to guess is younger than ' +
-                                                    result.player.summonerName
-                                                }
-                                            >
-                                                <SouthEastIcon
-                                                    style={{ fontSize: 16 }}
-                                                />
-                                            </Tooltip>
-                                        ) : (
-                                            ''
-                                        )}
-                                    </Box>
-                                </ResultCell>
+                                <AgeResultCell
+                                    older={result.compare.older}
+                                    summonerName={result.player.summonerName}
+                                    birthDate={result.player.birthDate}
+                                />
                             </Grid>
                         </Collapse>
                     ))}
