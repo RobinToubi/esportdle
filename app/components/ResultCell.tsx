@@ -47,7 +47,10 @@ export const ResultCell = (props: ResultCellProps) => {
 
     return (
         <>
-            <Tooltip title={getTooltipMessage(values.message)}>
+            <Tooltip
+                title={getTooltipMessage(values.message)}
+                enterTouchDelay={0}
+            >
                 <Grid
                     key={values.result}
                     item
